@@ -10,14 +10,10 @@ import (
 )
 
 func main() {
-	const IMTPower = 2
-
 	fmt.Println("⚖️___ Калькулятор индекса массы тела ___ ⚖️")
-
 	userHeight := getValidInput("Введите ваш рост (в сантиметрах, например: 192.1): ")
 	userKg := getValidInput("Введите ваш вес (в кг, например: 90): ")
-
-	IMT := userKg / math.Pow(userHeight/100, IMTPower)
+	IMT := calculateIMT(userHeight, userKg)
 	outputResult(IMT)
 }
 
@@ -38,4 +34,10 @@ func getValidInput(prompt string) float64 {
 
 func outputResult(imt float64) {
 	fmt.Printf("✅ Ваш индекс массы тела: %.2f\n", imt)
+}
+
+func calculateIMT(userHeight, userKg float64) float64 {
+	const IMTPower = 2
+	result := userKg / math.Pow(userHeight/100, IMTPower)
+	return result
 }
