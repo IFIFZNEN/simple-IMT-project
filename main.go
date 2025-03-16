@@ -16,6 +16,22 @@ func main() {
 	userHeight := getValidInput("Введите ваш рост (в сантиметрах, например: 192.1): ")
 	userKg := getValidInput("Введите ваш вес (в кг, например: 90): ")
 	IMT := calculateIMT(userHeight, userKg)
+
+	if IMT < 16 {
+		fmt.Println("У вас сильный дефицит массы тела")
+	} else if IMT >= 16 && IMT < 18.5 {
+		fmt.Println("У вас дефицит массы тела")
+	} else if IMT >= 18.5 && IMT < 25 {
+		fmt.Println("У вас нормальный вес")
+	} else if IMT >= 25 && IMT < 30 {
+		fmt.Println("У вас избыточный вес")
+	} else if IMT >= 30 && IMT < 35 {
+		fmt.Println("У вас 1-я степень ожирения")
+	} else if IMT >= 35 && IMT < 40 {
+		fmt.Println("У вас 2-я степень ожирения")
+	} else if IMT >= 40 {
+		fmt.Println("У вас 3-я степень ожирения")
+	}
 	outputResult(IMT)
 }
 
