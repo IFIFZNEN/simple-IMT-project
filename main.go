@@ -1,31 +1,41 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"math"
+	"os"
+	"strconv"
+	"strings"
 )
 
 func main() {
 	const IMTPower = 2
-	var userHeight float64 // рост
-	var userKg float64     // вес
+
 	fmt.Println("⚖️___ Калькулятор индекса массы тела ___ ⚖️")
-	fmt.Print("Enter your user height (в сантиметрах): ")
-	_, err := fmt.Scan(&userHeight)
-	if err != nil {
-		fmt.Printf("Вы неправильно ввели ваш рост. Например: 1.92 ERROR: %s", err)
-		return
-	}
-	fmt.Print("Enter your user kg: ")
-	_, err = fmt.Scan(&userKg)
-	if err != nil {
-		fmt.Printf("Вы неправильно ввели ваш вес. Например: 90 ERROR: %s", err)
-	}
+
+	userHeight := getValidInput("Введите ваш рост (в сантиметрах, например: 192.1): ")
+	userKg := getValidInput("Введите ваш вес (в кг, например: 90): ")
+
 	IMT := userKg / math.Pow(userHeight/100, IMTPower)
 	outputResult(IMT)
 }
 
+func getValidInput(prompt string) float64 {
+	reader := bufio.NewReader(os.Stdin)
+	for {
+		fmt.Print(prompt)
+		input, _ := reader.ReadString('\n')
+		input = strings.TrimSpace(input)
+
+		value, err := strconv.ParseFloat(input, 64)
+		if err == nil && value > 0 {
+			return value
+		}
+		fmt.Println("❌ Ошибка: Введите корректное число!")
+	}
+}
+
 func outputResult(imt float64) {
-	result := fmt.Sprintf("Ваш индекс массы тела: %0.f", imt)
-	fmt.Print(result)
+	fmt.Printf("✅ Ваш индекс массы тела: %.2f\n", imt)
 }
