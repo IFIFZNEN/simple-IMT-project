@@ -22,7 +22,10 @@ func main() {
 		fmt.Printf("Вы неправильно ввели ваш вес. Например: 90 ERROR: %s", err)
 	}
 	IMT := userKg / math.Pow(userHeight/100, IMTPower)
-	result := fmt.Sprintf("Ваш индекс массы тела: %0.f", IMT)
-	fmt.Print(result)
+	outputResult(IMT)
+}
 
+func outputResult(imt float64) {
+	result := fmt.Sprintf("Ваш индекс массы тела: %0.f", imt)
+	fmt.Print(result)
 }
