@@ -17,6 +17,7 @@ func main() {
 		if err != nil {
 			fmt.Println("Неправильно заданы параметры рассчёта:", err)
 			continue
+			// panic("Неправильно заданы параметры рассчёта")
 		}
 		outputResult(IMT)
 		isRepeateCalculation := checkRepeateCalculation()
