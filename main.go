@@ -1,8 +1,12 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"math"
+	"os"
+	"strconv"
+	"strings"
 )
 
 const IMTPower = 2
@@ -10,37 +14,46 @@ const IMTPower = 2
 func main() {
 
 	fmt.Println("⚖️___ Калькулятор индекса массы тела ___ ⚖️")
-	for {
-	userHeight, userKg := getUserInput()
+	userHeight := getValidInput("Введите ваш рост (в сантиметрах, например: 192.1): ")
+	userKg := getValidInput("Введите ваш вес (в кг, например: 90): ")
 	IMT := calculateIMT(userHeight, userKg)
 	outputResult(IMT)
-	isRepeateCalculation := checkRepeateCalculation()
-	if !isRepeateCalculation{
-		break
-	}
-	}
 
-}
-
-func outputResult(imt float64) {
-	fmt.Printf("✅ Ваш индекс массы тела: %.0f\n", imt)
-	
 	switch {
-	case imt < 16:
+	case IMT < 16:
 		fmt.Println("🦴 У вас сильный дефицит массы тела")
-	case imt < 18.5:
+	case IMT < 18.5:
 		fmt.Println("🍖 У вас дефицит массы тела")
-	case imt < 25:
+	case IMT < 25:
 		fmt.Println("😎 У вас нормальный вес")
-	case imt < 30:
+	case IMT < 30:
 		fmt.Println("👀 У вас избыточный вес")
-	case imt < 40:
+	case IMT < 40:
 		fmt.Println("😱 У вас 2-я степень ожирения")
-	case imt >= 40:
+	case IMT >= 40:
 		fmt.Println("🤯 У вас 3-я степень ожирения")
 	default:
 		fmt.Println("Не можем определить ваш вес")
 	}
+}
+
+func getValidInput(prompt string) float64 {
+	reader := bufio.NewReader(os.Stdin)
+	for {
+		fmt.Print(prompt)
+		input, _ := reader.ReadString('\n')
+		input = strings.TrimSpace(input)
+
+		value, err := strconv.ParseFloat(input, 64)
+		if err == nil && value > 0 {
+			return value
+		}
+		fmt.Println("❌ Ошибка: Введите корректное число!")
+	}
+}
+
+func outputResult(imt float64) {
+	fmt.Printf("✅ Ваш индекс массы тела: %.0f\n", imt)
 }
 
 func calculateIMT(userHeight, userKg float64) float64 {
@@ -48,23 +61,29 @@ func calculateIMT(userHeight, userKg float64) float64 {
 	return result
 }
 
-func checkRepeateCalculation() bool{
-	var userChoise string
-	fmt.Print("Вы хотите повторить работу приложения? Y/N: ")
-	fmt.Scan(&userChoise)
-	if userChoise == "y" || userChoise == "Y" {
-		return true
+func logica() {
+	for {
+		userHeight := getValidInput("Введите ваш рост (в сантиметрах, например: 192.1): ")
+		userKg := getValidInput("Введите ваш вес (в кг, например: 90): ")
+		IMT := calculateIMT(userHeight, userKg)
+		outputResult(IMT)
+
+		switch {
+		case IMT < 16:
+			fmt.Println("🦴 У вас сильный дефицит массы тела")
+		case IMT < 18.5:
+			fmt.Println("🍖 У вас дефицит массы тела")
+		case IMT < 25:
+			fmt.Println("😎 У вас нормальный вес")
+		case IMT < 30:
+			fmt.Println("👀 У вас избыточный вес")
+		case IMT < 40:
+			fmt.Println("😱 У вас 2-я степень ожирения")
+		case IMT >= 40:
+			fmt.Println("🤯 У вас 3-я степень ожирения")
+		default:
+			fmt.Println("Не можем определить ваш вес")
+		}
+		fmt.Scanln()
 	}
-	return false
-}
-
-func getUserInput() (float64, float64) {
-	var userHeight float64
-	var userKg float64
-
-	fmt.Println("Введите ваш рост (в сантиметрах, например: 192.1): ")
-	fmt.Scan(&userHeight)
-	fmt.Println("Введите ваш вес (в кг, например: 90): ")
-	fmt.Scan(&userKg)
-	return userHeight, userKg
 }
