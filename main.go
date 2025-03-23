@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math"
+	"errors"
 )
 
 const IMTPower = 2
@@ -11,13 +12,17 @@ func main() {
 
 	fmt.Println("⚖️___ Калькулятор индекса массы тела ___ ⚖️")
 	for {
-	userHeight, userKg := getUserInput()
-	IMT := calculateIMT(userHeight, userKg)
-	outputResult(IMT)
-	isRepeateCalculation := checkRepeateCalculation()
-	if !isRepeateCalculation{
-		break
-	}
+		userHeight, userKg := getUserInput()
+		IMT, err := calculateIMT(userHeight, userKg)
+		if err != nil {
+			fmt.Println("Неправильно заданы параметры рассчёта:", err)
+			continue
+		}
+		outputResult(IMT)
+		isRepeateCalculation := checkRepeateCalculation()
+		if !isRepeateCalculation{
+			break
+		}
 	}
 
 }
@@ -43,9 +48,12 @@ func outputResult(imt float64) {
 	}
 }
 
-func calculateIMT(userHeight, userKg float64) float64 {
+func calculateIMT(userHeight, userKg float64) (float64, error) {
+	if userKg <= 0 || userHeight <= 0 {
+		return 0, errors.New("USER_INPUT_ERROR")
+	}
 	result := userKg / math.Pow(userHeight/100, IMTPower)
-	return result
+	return result, nil
 }
 
 func checkRepeateCalculation() bool{
@@ -62,9 +70,9 @@ func getUserInput() (float64, float64) {
 	var userHeight float64
 	var userKg float64
 
-	fmt.Println("Введите ваш рост (в сантиметрах, например: 192.1): ")
+	fmt.Print("Введите ваш рост (в сантиметрах, например: 192.1): ")
 	fmt.Scan(&userHeight)
-	fmt.Println("Введите ваш вес (в кг, например: 90): ")
+	fmt.Print("Введите ваш вес (в кг, например: 90): ")
 	fmt.Scan(&userKg)
 	return userHeight, userKg
 }
